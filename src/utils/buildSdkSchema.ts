@@ -37,20 +37,11 @@ export async function buildSdkSchema(
     let path = getPath(params.output, params);
     let tabSize = params.tab;
 
-    let reqsrvImports = ['SchemaEntry', 'PartialResponse', 'ResponseShape'];
+    let reqsrvImports = ['ReqShape', 'ResBody', 'ResShape'];
     let sdkMapValues = Object.values(sdkMap);
 
-    let initTypes = [
-        'type ResBody<T extends SchemaEntry> = PartialResponse<T, \'body\'>;',
-        'type ResShape<T extends SchemaEntry> = ResponseShape<T[\'response\']>;',
-    ];
-
-    if (sdkMapValues.some(([, mode]) => mode === 'query')) {
-        reqsrvImports.push('PartialRequest');
-        initTypes.unshift(
-            'type Query<T extends SchemaEntry> = PartialRequest<T, \'query\'>;',
-        );
-    }
+    if (sdkMapValues.some(([, mode]) => mode === 'query'))
+        reqsrvImports.push('ReqQuery');
 
     let depImports: ImportItem[] = [
         [`type {${reqsrvImports.sort().join(', ')}}`, 'reqsrv'],
@@ -78,8 +69,6 @@ export async function buildSdkSchema(
     let t = allImports
         .map(([target, location]) => `import ${target} from '${location}';`)
         .join('\n');
-        
-    t += '\n\n' + initTypes.join('\n');
 
     let tree: Record<string, unknown> = {};
     let rootNs = [
@@ -108,8 +97,8 @@ export async function buildSdkSchema(
             switch (i) {
                 case 0:
                     type = mode === 'query'
-                        ? `Query<${methodType}>`
-                        : `${methodType}['request']`;
+                        ? `ReqQuery<${methodType}>`
+                        : `ReqShape<${methodType}>`;
                     break;
                 case 1:
                     type = `ResBody<${methodType}>`;
