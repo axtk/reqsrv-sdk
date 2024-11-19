@@ -52,15 +52,11 @@ export async function buildSdkSchema(
         );
     }
 
-    let methodTypesDir = getRelativePath(
-        params.methods ?? 'src/types/methods',
-        params,
-    );
-
     let depImports: ImportItem[] = [
         [`type {${reqsrvImports.sort().join(', ')}}`, 'reqsrv'],
     ];
 
+    let methodTypesDir = getRelativePath(params.methods, params);
     let localImports: ImportItem[] = Object.values(schemaMap)
         .map(s => [`type {${s}}`, `${methodTypesDir}/${s}`]);
 
