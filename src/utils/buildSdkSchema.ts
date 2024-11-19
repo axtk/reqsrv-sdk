@@ -37,11 +37,14 @@ export async function buildSdkSchema(
     let path = getPath(params.output, params);
     let tabSize = params.tab;
 
-    let reqsrvImports = ['ReqShape', 'ResBody', 'ResShape'];
+    let reqsrvImports = ['ResBody', 'ResShape'];
     let sdkMapValues = Object.values(sdkMap);
 
     if (sdkMapValues.some(([, mode]) => mode === 'query'))
         reqsrvImports.push('ReqQuery');
+
+    if (sdkMapValues.some(([, mode]) => mode === 'full'))
+        reqsrvImports.push('ReqShape');
 
     let depImports: ImportItem[] = [
         [`type {${reqsrvImports.sort().join(', ')}}`, 'reqsrv'],
