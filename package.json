@@ -1,0 +1,23 @@
+{
+  "name": "reqsrv-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/run.js",
+  "bin": {
+    "reqsrv-sdk": "dist/run.js"
+  },
+  "scripts": {
+    "build": "esbuild src/run.ts --bundle --outfile=dist/run.js --platform=node --minify",
+    "prepublishOnly": "npm run build",
+    "preversion": "npm run build"
+  },
+  "author": "axtk",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "esbuild": "^0.24.0"
+  },
+  "dependencies": {
+    "args-json": "^1.2.4"
+  }
+}

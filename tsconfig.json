@@ -1,0 +1,13 @@
+{
+    "include": ["src", "index.ts"],
+    "compilerOptions": {
+        "lib": ["ESNext", "DOM"],
+        "target": "ESNext",
+        "outDir": "dist",
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
+    }
+}
